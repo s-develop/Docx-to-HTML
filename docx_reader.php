@@ -112,7 +112,7 @@ class Docx_reader {
 
             $children = $xml->children($namespaces['w']);
 
-            $html = '<!doctype html><html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><title></title><style>span.block { display: block; }</style></head><body>';
+            $html = '';
 
             foreach ($children->body->p as $p) {
                 $style = '';
@@ -139,7 +139,7 @@ class Docx_reader {
                     }
                 }
 
-                $html.='<span class="block" style="' . $style . '">';
+                $html.='';
                 $li = false;
                 if ($p->pPr->numPr) {
                     $li = true;
@@ -182,12 +182,13 @@ class Docx_reader {
                         $openTags.='<' . $tag . '>';
                         $closeTags.='</' . $tag . '>';
                     }
-                    $html.='<span style="' . implode(';', $attrs) . '">' . $openTags . $part->t . $closeTags . '</span>';
+                    $html.='<p>' . $openTags . $part->t . $closeTags . '</p>'. PHP_EOL;
                 }
                 if ($li) {
                     $html.='</li>';
                 }
-                $html.="</span>";
+                $html.="</p>";
+                $html = str_replace('<p></p>', '', $html);
             }
 
             //Trying to weed out non-utf8 stuff from the file:
@@ -205,7 +206,7 @@ class Docx_reader {
 END;
             preg_replace($regex, '$1', $html);
 
-            return $html . '</body></html>';
+            return $html . '';
             exit();
         }
     }

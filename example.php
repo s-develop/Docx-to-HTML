@@ -8,7 +8,7 @@
 include('./docx_reader.php');
 
 $doc = new Docx_reader();
-$doc->setFile('./sample.docx');
+$doc->setFile('./article.docx');
 
 if(!$doc->get_errors()) {
     $html = $doc->to_html();
